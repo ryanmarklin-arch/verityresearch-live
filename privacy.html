@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy | Verity</title>
+<meta name="description" content="What Verity collects, why, who processes it and how long it is kept.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-void:#090C10;--bg-surface:#10151E;--border-hairline:#1E2738;
+  --accent-blue-text:#7C9BFF;--text-primary:#F1F5F9;--text-muted:#8B9BB4;
+  --font-sans:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+body{margin:0;background:var(--bg-void);color:var(--text-primary);font-family:var(--font-sans);font-size:1rem;line-height:1.6}
+main{max-width:760px;margin:0 auto;padding:48px 16px 64px}
+a{color:var(--accent-blue-text)}
+h1{font-size:2rem;margin:0 0 8px}
+h2{font-size:1.15rem;margin:36px 0 8px;padding-top:20px;border-top:1px solid var(--border-hairline)}
+p,li{color:var(--text-primary)}
+.muted{color:var(--text-muted)}
+code{font-family:var(--font-mono);font-size:.9em;background:var(--bg-surface);padding:1px 5px;border-radius:4px}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid var(--border-hairline)}
+th{color:var(--text-muted);font-weight:500}
+.wrap{overflow-x:auto}
+</style>
+</head>
+<body>
+<main>
+<p><a href="/">← Verity</a></p>
+<h1>Privacy</h1>
+<p class="muted">Last updated 21 November 2026.</p>
+
+<p>Verity is a research tool for prediction markets. This page says what the site collects, why, which services process it and how long it is kept. Verity does not sell personal data, does not show ads and does not use analytics or tracking scripts.</p>
+
+<h2>Browsing without an account</h2>
+<ul>
+<li>Market prices load from Gemini's public API (<code>api.gemini.com</code>) directly in your browser, so Gemini sees your IP address for those requests.</li>
+<li>Fonts come from Google Fonts and some scripts from cdnjs (Cloudflare). Those services see your IP address when they serve the files.</li>
+<li>Selecting a market only stores your choice in this tab's session storage, which is cleared when you close the tab. If you request an AI review, forecast or answer, or start a voice call, Verity sends the selected market's public data to the AI provider, as described below.</li>
+</ul>
+
+<h2>Signing in</h2>
+<ul>
+<li>You sign in with Google or GitHub. Accounts are stored with Supabase. Verity receives your email address and a provider account ID.</li>
+<li>Before an account is created, Verity stores a short-lived SHA-256 hash of the provider account ID to confirm the signup came from the Verity sign-in page.</li>
+<li>Cloudflare Turnstile checks that you are a person. Cloudflare processes your browser and network data for that check.</li>
+<li>A <code>__Host-verity-session</code> cookie keeps you signed in. It is HTTP-only and sent only to verityresearch.us.</li>
+</ul>
+
+<h2>AI second opinion and research</h2>
+<ul>
+<li>When you ask for a review, a forecast or ask a question, Verity sends the market's public data and your question to Google's Gemini API. If Gemini is unavailable, it uses Cloudflare Workers AI instead. Please don't type personal details into questions.</li>
+<li>Research searches send your search text to Exa. Results are cached for 30 minutes.</li>
+<li>Daily limits are counted against a SHA-256 hash of your IP address (guests) or of your account (signed in). The raw IP address and account ID are not stored for this.</li>
+</ul>
+
+<h2>Voice calls</h2>
+<ul>
+<li>Voice is optional and starts only when you press Start voice and allow the microphone. Calls last at most 60 seconds.</li>
+<li>Your voice is streamed to ElevenLabs, which runs the voice agent. The agent uses ElevenLabs' zero-retention mode, so the audio and the words of the call (transcript and summary) are not kept after the call. Verity does not record calls.</li>
+<li>ElevenLabs does keep a record of each call without its content: start time, length, number of turns, cost and your browser's time zone. It stays in Verity's ElevenLabs workspace until the Verity team deletes it.</li>
+<li>Verity hasn’t configured ElevenLabs to forward call data through webhooks or storage exports.</li>
+<li>During a call the agent can read the market you have open and look up public Gemini market data.</li>
+<li>To enforce call limits, Verity stores keyed hashes of your IP address, account and browser, and sets <code>__Host-verity-voice-browser</code> and <code>__Host-verity-voice-guest</code> cookies. No audio, raw IP address or raw account ID is stored.</li>
+</ul>
+
+<h2>Services that process data for Verity</h2>
+<div class="wrap">
+<table>
+<tr><th>Service</th><th>What for</th></tr>
+<tr><td>Cloudflare</td><td>Hosting the site's edge Workers, Turnstile, Workers AI, request logs</td></tr>
+<tr><td>GitHub Pages</td><td>Hosting the site's pages</td></tr>
+<tr><td>Supabase</td><td>Accounts and sign-in</td></tr>
+<tr><td>Google, GitHub</td><td>Sign-in providers</td></tr>
+<tr><td>Google (Gemini API)</td><td>AI reviews, forecasts and answers</td></tr>
+<tr><td>Exa</td><td>Research search</td></tr>
+<tr><td>ElevenLabs</td><td>Voice calls</td></tr>
+<tr><td>Gemini (exchange)</td><td>Public market data</td></tr>
+</table>
+</div>
+
+<h2>How long data is kept</h2>
+<ul>
+<li>Sign-in proof hashes expire within minutes.</li>
+<li>Daily usage counters reset each UTC day. Voice counters cover at most the last 31 days.</li>
+<li>Account data is kept until you ask for it to be deleted.</li>
+<li>Hosting providers keep their own request logs under their own policies.</li>
+</ul>
+
+<h2>Your choices</h2>
+<ul>
+<li>You can use the site without an account, and without voice.</li>
+<li>To see or delete your account data, open an issue at <a href="https://github.com/ubc-2026/verity/issues">github.com/ubc-2026/verity</a> without posting personal details, and the team will follow up.</li>
+</ul>
+</main>
+</body>
+</html>
